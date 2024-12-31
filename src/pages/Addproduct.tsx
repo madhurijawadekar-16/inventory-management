@@ -64,6 +64,11 @@ const AddProductPage: React.FC = () => {
 		])
 	}
 
+	// Remove material row logic
+	const handleRemoveMaterialRow = (index: number) => {
+		const updatedRows = materialRows.filter((_, i) => i !== index)
+		setMaterialRows(updatedRows)
+	}
 	const handleSubmit = () => {
 		const totalCost = materialRows.reduce(
 			(sum: any, mat: { totalAmount: any }) => sum + mat.totalAmount,
@@ -89,18 +94,22 @@ const AddProductPage: React.FC = () => {
 	}
 
 	return (
-		<div style={{ padding: '20px' }}>
-			<ProductForm
-				product={product}
-				setProduct={setProduct}
-				materialRows={materialRows}
-				setMaterialRows={setMaterialRows}
-				onSubmit={handleSubmit}
-				units={units}
-				handleMaterialChange={handleMaterialChange}
-				handleAddMaterialRow={handleAddMaterialRow}
-			/>
-		</div>
+		<>
+			<h2>Add Product</h2>
+			<div style={{ padding: '20px' }}>
+				<ProductForm
+					product={product}
+					setProduct={setProduct}
+					materialRows={materialRows}
+					setMaterialRows={setMaterialRows}
+					onSubmit={handleSubmit}
+					units={units}
+					handleMaterialChange={handleMaterialChange}
+					handleAddMaterialRow={handleAddMaterialRow}
+					handleRemoveMaterialRow={handleRemoveMaterialRow}
+				/>
+			</div>
+		</>
 	)
 }
 

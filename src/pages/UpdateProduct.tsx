@@ -6,7 +6,7 @@ import { Material, Product } from '../features/slice'
 import ProductForm from '../components/ProductForm'
 
 const UpdateProductPage: React.FC = () => {
-	const { id } = useParams<{ id: string | any }>() // Get product ID from the URL
+	const { id } = useParams<{ id?: string }>()
 	const [product, setProduct] = useState<Omit<Product, 'id' | 'totalCost'>>({
 		name: '',
 		unit: '',
@@ -23,6 +23,11 @@ const UpdateProductPage: React.FC = () => {
 	const units = ['ml', 'ltr', 'gm', 'kg', 'mtr', 'mm', 'box']
 
 	useEffect(() => {
+		if (!id) {
+			navigate('/') // If the id is not provided, navigate to another page (optional)
+			return // Exit early if id is undefined
+		}
+
 		// Fetch the product and materials from local storage or an API
 		const existingProducts = localStorage.getItem('products')
 		if (existingProducts) {
@@ -41,7 +46,7 @@ const UpdateProductPage: React.FC = () => {
 				setMaterialRows(productToEdit.materials)
 			}
 		}
-	}, [id])
+	}, [id, navigate])
 
 	const handleMaterialChange = (index: number, field: string, value: any) => {
 		const updatedRows = [...materialRows]
@@ -81,16 +86,19 @@ const UpdateProductPage: React.FC = () => {
 			0
 		)
 
-		const updatedProduct: any = {
+		if (!id) return '' // Ensure we don't update the product without a valid id
+
+		const updatedProduct: Product = {
 			...product,
 			totalCost,
 			materials: materialRows,
+			id: parseInt(id), // Ensure the id is set for the updated product
 		}
 
 		// Update the product in local storage
 		const existingProducts = localStorage.getItem('products')
 		if (existingProducts) {
-			const products: any = JSON.parse(existingProducts)
+			const products: Product[] = JSON.parse(existingProducts)
 			const productIndex = products.findIndex(
 				(prod: Product) => prod.id === parseInt(id)
 			)
@@ -100,8 +108,8 @@ const UpdateProductPage: React.FC = () => {
 			}
 		}
 
-		// Dispatch the update action to the Redux store
-		dispatch(updateProduct(updatedProduct))
+		// Dispatch the update action with the expected payload structure
+		dispatch(updateProduct({ id: updatedProduct.id, product: updatedProduct }))
 		navigate('/') // Navigate back to the product list page
 	}
 
