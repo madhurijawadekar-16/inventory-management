@@ -1,10 +1,19 @@
-import './App.css'
 import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import ListProductPage from './pages/Home'
+import AddProductPage from './pages/Addproduct'
+import UpdateProductPage from './pages/UpdateProduct'
+import ProductDetailPage from './pages/ProductDetails'
 
-function App() {
+const App: React.FC = () => {
 	return (
-		<div className='App'>
-			<h1>Hello</h1>
+		<div>
+			<Routes>
+				<Route path='/' element={<ListProductPage />} />
+				<Route path='/product/:id' element={<ProductDetailPage />} />
+				<Route path='/add-product' element={<AddProductPage />} />
+				<Route path='/update-product/:id' element={<UpdateProductPage />} />
+			</Routes>
 		</div>
 	)
 }

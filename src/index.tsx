@@ -1,15 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
 import App from './App'
+import { store } from './features/store' // Import the Redux store
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+// Make sure the root element exists
+const rootElement = document.getElementById('root')
 
-root.render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>
-)
-
-// Remove the line below if you don’t want to use performance tracking
-// reportWebVitals()
+if (rootElement) {
+	ReactDOM.createRoot(rootElement).render(
+		<Provider store={store}>
+			<Router>
+				<App />
+			</Router>
+		</Provider>
+	)
+}
